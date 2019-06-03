@@ -67,7 +67,6 @@ client.on('message', message => {
   if(command == `قل1`){
    if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("no")
    let botmessage = args.join(" ");
-   message.delete().catch;
    message.channel.send(botmessage);
   }
 });
@@ -115,7 +114,6 @@ client2.on('message', message => {
 if(command == `قل2`){
  if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("no")
  let botmessage = args.join(" ");
- message.delete().catch;
  message.channel.send(botmessage);
 }
 });
